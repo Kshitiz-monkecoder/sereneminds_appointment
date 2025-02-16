@@ -1,0 +1,51 @@
+/* Ensure the root div takes full height of the viewport */
+.root {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh; /* Ensures full-screen coverage */
+  background-color: #228be6; /* Blue background */
+  padding: 20px;
+  text-align: center;
+}
+
+/* Center container */
+.container {
+  max-width: 600px;
+  width: 100%;
+}
+
+/* Error label */
+.label {
+  font-weight: 900;
+  font-size: 220px;
+  line-height: 1;
+  margin-bottom: 24px;
+  color: #74c0fc; /* Lighter blue */
+}
+
+/* Title text */
+.title {
+  font-family: 'Greycliff CF', sans-serif;
+  font-weight: 900;
+  font-size: 38px;
+  color: white;
+}
+
+/* Description text */
+.description {
+  max-width: 540px;
+  margin: 24px auto 36px;
+  color: #a5d8ff; /* Light blue */
+}
+
+/* Responsive design for smaller screens */
+@media (max-width: 768px) {
+  .label {
+    font-size: 120px;
+  }
+
+  .title {
+    font-size: 32px;
+  }
+}

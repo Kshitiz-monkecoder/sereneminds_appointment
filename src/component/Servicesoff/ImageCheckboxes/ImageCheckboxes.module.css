@@ -1,0 +1,32 @@
+.button {
+  display: flex;
+  flex-direction: column;
+  transition: background-color 150ms ease, border-color 150ms ease;
+  border-radius: 8px;
+  padding: 16px;
+  border: 1px solid var(--mantine-color-gray-3);
+  background-color: var(--mantine-color-white);
+  cursor: pointer;
+}
+
+.button:hover {
+  background-color: var(--mantine-color-gray-1);
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 8px; /* Adjust spacing between rows */
+}
+
+.left {
+  text-align: left;
+  flex: 1;
+}
+
+.right {
+  text-align: right;
+  flex-shrink: 0;
+}
