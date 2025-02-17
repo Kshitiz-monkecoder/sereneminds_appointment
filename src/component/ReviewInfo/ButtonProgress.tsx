@@ -5,9 +5,10 @@ import classes from './ButtonProgress.module.css';
 
 interface ButtonProgressProps {
   onComplete: () => void; // Callback function to trigger when progress completes
+  isAppointmentBooked: boolean; // Prop to check if the appointment is booked
 }
 
-export function ButtonProgress({ onComplete }: ButtonProgressProps) {
+export function ButtonProgress({ onComplete, isAppointmentBooked }: ButtonProgressProps) {
   const theme = useMantineTheme();
   const [progress, setProgress] = useState(0);
   const [loaded, setLoaded] = useState(false);
@@ -32,24 +33,27 @@ export function ButtonProgress({ onComplete }: ButtonProgressProps) {
       fullWidth
       className={classes.button}
       onClick={() => (loaded ? setLoaded(false) : !interval.active && interval.start())}
+      disabled={isAppointmentBooked} // Disable the button after booking
       styles={{
         root: {
-          backgroundColor: loaded ? theme.colors.teal[6] : 'white', // Button background
-          color: 'black', // Text color
-          borderRadius: '1rem', // More rounded corners
-          border: `1px solid ${theme.colors.gray[4]}`, // Optional border
+          backgroundColor: loaded ? theme.colors.teal[6] : 'white',
+          color: 'black',
+          borderRadius: '1rem',
+          border: `1px solid ${theme.colors.gray[4]}`,
           transition: 'background-color 150ms ease',
         },
       }}
     >
       <div className={classes.label}>
-        {progress !== 0
+        {isAppointmentBooked
+          ? 'Your appointment is booked'
+          : progress !== 0
           ? 'Scheduling your appointment'
           : loaded
-          ? 'Redirecting to payment page'
+          ? 'Processing payment'
           : 'Book my appointment'}
       </div>
-      {progress !== 0 && (
+      {progress !== 0 && !isAppointmentBooked && (
         <Progress
           value={progress}
           className={classes.progress}

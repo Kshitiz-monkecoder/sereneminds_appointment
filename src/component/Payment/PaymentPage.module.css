@@ -1,0 +1,87 @@
+/* PaymentPage.module.css */
+
+.card {
+    max-width: 600px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background-color: var(--mantine-color-white);
+    border-radius: var(--mantine-radius-md);
+    box-shadow: var(--mantine-shadow-lg);
+  }
+  
+  .title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--mantine-color-gray-9);
+    margin-bottom: 0.5rem;
+  }
+  
+  .item {
+    margin-bottom: 1rem;
+    padding: 0.75rem;
+    border-radius: var(--mantine-radius-sm);
+    background-color: var(--mantine-color-gray-0);
+  }
+  
+  .item:hover {
+    background-color: var(--mantine-color-gray-1);
+  }
+  
+  .itemText {
+    font-size: 1rem;
+    color: var(--mantine-color-gray-9);
+  }
+  
+  .itemDescription {
+    font-size: 0.875rem;
+    color: var(--mantine-color-gray-6);
+  }
+  
+  .button {
+    margin-top: 1.5rem;
+    background-color: var(--mantine-color-blue-6);
+    color: var(--mantine-color-white);
+    font-weight: 500;
+    transition: background-color 0.2s ease;
+  }
+  
+  .button:hover {
+    background-color: var(--mantine-color-blue-7);
+  }
+  
+  .button:disabled {
+    background-color: var(--mantine-color-gray-5);
+    cursor: not-allowed;
+  }
+  
+  .errorText {
+    color: var(--mantine-color-red-6);
+    font-size: 0.875rem;
+    margin-top: 1rem;
+    text-align: center;
+  }
+  
+  .divider {
+    margin: 1.5rem 0;
+    border-top-color: var(--mantine-color-gray-3);
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .card {
+      margin: 1rem;
+      padding: 1.5rem;
+    }
+  
+    .title {
+      font-size: 1.25rem;
+    }
+  
+    .itemText {
+      font-size: 0.9375rem;
+    }
+  
+    .itemDescription {
+      font-size: 0.8125rem;
+    }
+  }

@@ -7,6 +7,7 @@ import {
   Text,
   Container,
   Center,
+  Button,
 } from '@mantine/core';
 import { ContinueButton } from './GoogleButton';
 import { LeadGrid } from './LeadGrid/LeadGrid';
@@ -36,9 +37,10 @@ export function Calendar(props: PaperProps) {
           }}
           
         >
-          <Center>
+          <Group >
+            <Button variant="subtle" onClick={() => navigate(-1)}>Back</Button>
             <UserButton />
-          </Center>
+          </Group>
 
           {/* Centered 'Select date and time' */}
           <Center>

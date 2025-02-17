@@ -10,7 +10,7 @@ import { ReviewInfo } from "./component/ReviewInfo/ReviewInfo";
 import { ServerError } from "./component/ServerError/ServerError"; 
 import { AppointmentSuccess } from "./component/appointmentsuccess/AppointmentSuccess";
 import ProfessionalDetails from "./component/ProfessionalDetails";
-import {PaymentPage} from "./component/Payment/Payment";
+import PaymentComponent from "./component/Payment/Payment";
 import Hello from "./Hello";
 
 export default function App() {
@@ -29,7 +29,7 @@ export default function App() {
           <Route path="/appointmentsuccess/:id" element={<AppointmentSuccess />} />
           <Route path="/servererror/:id" element={<ServerError />} />
           <Route path="/professional/:id" element={<ProfessionalDetails />} />
-          <Route path="/payment/process" element={<PaymentPage />} />
+          <Route path="/payment/process" element={<PaymentComponent />} />
 
         </Routes>
       </Router>

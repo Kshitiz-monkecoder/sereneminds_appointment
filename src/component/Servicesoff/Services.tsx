@@ -119,6 +119,11 @@ export function Services(props: PaperProps) {
               Continue
             </ContinueButton>
           </Group>
+          <Group grow mb="md" mt="md">
+            <ContinueButton radius="xl" onClick={() => navigate(-1)}>
+              Back
+            </ContinueButton>
+          </Group>
         </Paper>
       </Center>
     </Container>

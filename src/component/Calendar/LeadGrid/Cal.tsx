@@ -5,33 +5,46 @@ import dayjs from 'dayjs';
 
 interface DemoProps {
   availability: { [key: string]: string };
-  onDateSelect: (date: Date | null) => void; // Add this prop
+  onDateSelect: (date: Date | null) => void;
 }
 
-export function Demo({ onDateSelect }: DemoProps) {
+export function Demo({ availability, onDateSelect }: DemoProps) {
   const [selected, setSelected] = useState<Date | null>(null);
+  const today = new Date();
 
   const handleSelect = (date: Date) => {
+    if (dayjs(date).isBefore(today, 'date')) return; // Prevent selecting past dates
+
     const isSelected = selected && dayjs(date).isSame(selected, 'date');
     if (isSelected) {
-      setSelected(null); // Deselect if the same date is clicked again
-      onDateSelect(null); // Notify parent component
+      setSelected(null);
+      onDateSelect(null);
     } else {
-      setSelected(date); // Select new date
-      onDateSelect(date); // Notify parent component
+      setSelected(date);
+      onDateSelect(date);
     }
   };
 
   return (
-    <Calendar
-      style={{
-        width: '100%', // Fill the width of the parent container
-        height: '100%', // Fill the height of the parent container
-      }}
-      getDayProps={(date) => ({
-        selected: selected ? dayjs(date).isSame(selected, 'date') : false,
-        onClick: () => handleSelect(date),
-      })}
-    />
+    <div className="flex justify-center items-center w-full h-full">
+      <Calendar
+        className="w-full h-full"
+        getDayProps={(date) => {
+          const isToday = dayjs(date).isSame(today, 'date');
+          const isSelected = selected ? dayjs(date).isSame(selected, 'date') : false;
+
+          return {
+            selected: isSelected,
+            onClick: () => handleSelect(date),
+            disabled: dayjs(date).isBefore(today, 'date'), // Disable past dates
+            style: {
+              backgroundColor: isToday ? '#ffcc00' : isSelected ? '#4299e1' : 'transparent',
+              color: isToday || isSelected ? '#000' : 'inherit',
+              cursor: dayjs(date).isBefore(today, 'date') ? 'not-allowed' : 'pointer',
+            },
+          };
+        }}
+      />
+    </div>
   );
 }
