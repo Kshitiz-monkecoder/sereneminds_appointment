@@ -1,19 +1,10 @@
 import { useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
-import axios from 'axios';
 import "react-toastify/dist/ReactToastify.css";
 import { RootState } from "../../store/store"; // Adjust the import based on your store setup
-import {
-  setDate,
-  setTime,
-  setService,
-  setClientId,
-  setProfessionalId,
-  setFees,
-  setDuration,
-} from "../../store/slices/appointmentSlice"; // Adjust the import based on your slice setup // Adjust the import based on your slice setup
+import { Card, Text, Button, Group, Loader, Container, Title, Paper } from '@mantine/core';
 
 declare global {
   interface Window {
@@ -23,20 +14,18 @@ declare global {
 
 const PaymentComponent = () => {
   const location = useLocation();
-  const dispatch = useDispatch();
   const { appointmentDetails } = location.state || {};
   const [paymentStatus, setPaymentStatus] = useState<string | null>(null);
   const [isRazorpayLoaded, setIsRazorpayLoaded] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   // Redux selectors
   const professionalId = useSelector(
     (state: RootState) => state.professional.data?.id
   );
   const professionalState = useSelector((state: RootState) => state.professional);
-  const clientName = useSelector((state: RootState) => state.client.name);
   const clientEmail = useSelector((state: RootState) => state.client.email);
-  const userToken = professionalState.data?.uid
-  console.log("kaf", userToken)
+  const userToken = professionalState.data?.uid;
   const appointmentState = useSelector((state: RootState) => state.appointments);
 
   // Load Razorpay script dynamically
@@ -115,97 +104,36 @@ const PaymentComponent = () => {
     }
   };
 
-  // Create Google Calendar Event
-  // const createGoogleCalendarEvent = async (appointmentDetails: any, userToken: string, clientName: string, clientEmail: string) => {
-  //   // Extract the start time from the time range (e.g., "10:00 - 11:00" → "10:00")
-  //   const startTime = appointmentDetails.time.split(" - ")[0];
-  
-  //   // Construct the date string in the format "YYYY-MM-DDTHH:MM:00"
-  //   const dateTimeString = `${appointmentDetails.date}T${startTime}:00`;
-  
-  //   // Create a Date object and validate it
-  //   const appointmentDate = new Date(dateTimeString);
-  //   if (isNaN(appointmentDate.getTime())) {
-  //     throw new Error("Invalid date or time format.");
-  //   }
-  
-  //   // Format the date to ISO string
-  //   const formattedDate = appointmentDate.toISOString();
-  
-  //   const event = {
-  //     summary: `Meeting with ${clientName}`,
-  //     start: {
-  //       dateTime: formattedDate,
-  //       timeZone: "Asia/Kolkata",
-  //     },
-  //     end: {
-  //       dateTime: new Date(appointmentDate.getTime() + 60 * 60 * 1000).toISOString(), // Assuming 1 hour duration
-  //       timeZone: "Asia/Kolkata",
-  //     },
-  //     conferenceData: {
-  //       createRequest: {
-  //         requestId: `meet-${Date.now()}`,
-  //         conferenceSolutionKey: { type: "hangoutsMeet" },
-  //       },
-  //     },
-  //     attendees: [{ email: clientEmail }], // Add client email as attendee
-  //   };
-  
-  //   try {
-  //     const response = await axios.post(
-  //       "https://www.googleapis.com/calendar/v3/calendars/primary/events?conferenceDataVersion=1",
-  //       event,
-  //       {
-  //         headers: {
-  //           Authorization: `Bearer ${userToken}`,
-  //           "Content-Type": "application/json",
-  //         },
-  //       }
-  //     );
-  
-  //     return response.data;
-  //   } catch (error) {
-  //     console.error("Error creating Google Calendar event:", error);
-  //     throw error;
-  //   }
-  // };
-
   // Save appointment details after successful payment
-  const saveAppointmentDetails = async (paymentId: string) => {
+  const saveAppointmentDetails = async () => {
     try {
       // Validate date and time
       if (!appointmentState.date || !appointmentState.time) {
         throw new Error("Date or time is missing in appointment details.");
       }
-  
+
       // Extract the duration from the selected service
-      const selectedService = professionalState.data.services.find((service: { duration: string }) => {
-        // Add a condition to find the specific service if needed
+      const selectedService = professionalState.data.services.find((_service: { duration: string }) => {
         return true; // Replace with your condition
       });
-  
+
       const durationTime = selectedService ? parseInt(selectedService.duration.match(/\d+/)?.[0], 10) : null;
-  
-      // Log the inputs for debugging
-      console.log("Appointment Date:", appointmentState.date);
-      console.log("Appointment Time:", appointmentState.time);
-      console.log("Service Duration:", durationTime);
-  
+
       // Extract the start time from the time range (e.g., "10:00 - 11:00" → "10:00")
       const startTime = appointmentState.time.split(" - ")[0];
-  
+
       // Construct the date string in the format "YYYY-MM-DDTHH:MM:00Z"
       const dateTimeString = `${appointmentState.date}T${startTime}:00Z`;
-  
+
       // Create a Date object and validate it
       const appointmentDate = new Date(dateTimeString);
       if (isNaN(appointmentDate.getTime())) {
         throw new Error("Invalid date or time format.");
       }
-  
+
       // Format the date to ISO string (already in the correct format)
       const formattedDate = appointmentDate.toISOString();
-  
+
       // Construct the payload
       const payload = {
         client_id: appointmentState.clientId,
@@ -216,9 +144,7 @@ const PaymentComponent = () => {
         message: appointmentDetails?.message || "No message provided",
         status: "Upcoming",
       };
-  
-      console.log("Sending payload:", payload); // Debugging: Log the payload
-  
+
       // Save appointment details to your backend
       const response = await fetch(
         `https://serene-minds-backend.vercel.app/api/appointment/create`,
@@ -228,20 +154,14 @@ const PaymentComponent = () => {
           body: JSON.stringify(payload),
         }
       );
-  
+
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.error || "Failed to save appointment details.");
       }
-  
-      // Debugging: Log userToken and clientEmail
-      console.log("User Token:", userToken);
-      console.log("Client Email:", clientEmail);
-  
+
       // After successfully saving the appointment, create a Google Calendar event
       if (userToken && clientEmail) {
-        // console.log("Creating Google Calendar event...");
-        // await createGoogleCalendarEvent(appointmentState, userToken, clientName, clientEmail);
         toast.success("Appointment booked and Google Calendar event created successfully!");
       } else {
         console.error("Missing data for Google Calendar event:", {
@@ -250,7 +170,7 @@ const PaymentComponent = () => {
         });
         toast.error("Failed to create Google Calendar event: User token or client email is missing.");
       }
-  
+
     } catch (error) {
       console.error("Error saving appointment details:", error);
       setPaymentStatus("Failed to save appointment details.");
@@ -270,8 +190,12 @@ const PaymentComponent = () => {
       return;
     }
 
+    setIsLoading(true);
     const razorpayOrderId = await createOrder();
-    if (!razorpayOrderId) return;
+    if (!razorpayOrderId) {
+      setIsLoading(false);
+      return;
+    }
 
     const options = {
       key: "rzp_test_JKAo6mCifjqfd5",
@@ -288,8 +212,9 @@ const PaymentComponent = () => {
       }) => {
         const verificationResult = await verifyPayment(response);
         if (verificationResult) {
-          await saveAppointmentDetails(response.razorpay_payment_id);
+          await saveAppointmentDetails();
         }
+        setIsLoading(false);
       },
     };
 
@@ -298,37 +223,47 @@ const PaymentComponent = () => {
   };
 
   return (
-    <div className="max-w-lg mx-auto p-6 bg-white shadow-lg rounded-lg mt-40">
+    <Container size="sm" py="xl" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
       <ToastContainer position="top-right" autoClose={3000} />
-      <h2 className="text-2xl font-semibold text-center mb-6">Appointment Payment</h2>
-      <div className="space-y-4">
-        <div className="flex justify-between items-center">
-          <label className="text-lg font-medium">Service:</label>
-          <p>{appointmentState.service}</p>
-        </div>
-        <div className="flex justify-between items-center">
-          <label className="text-lg font-medium">Date:</label>
-          <p>{appointmentState.date}</p>
-        </div>
-        <div className="flex justify-between items-center">
-          <label className="text-lg font-medium">Time:</label>
-          <p>{appointmentState.time}</p>
-        </div>
-        <div className="flex justify-between items-center">
-          <label className="text-lg font-medium">Message:</label>
-          <p>{appointmentDetails?.message}</p>
-        </div>
-      </div>
-      <button
-        onClick={makePayment}
-        className="w-full mt-6 py-2 bg-blue-600 text-white rounded-lg"
-      >
-        Pay {appointmentState.fees}
-      </button>
-      {paymentStatus && (
-        <p className="mt-4 text-center text-green-500">{paymentStatus}</p>
-      )}
-    </div>
+      <Card shadow="lg" padding="xl" radius="lg" withBorder style={{ width: '100%', maxWidth: '500px' }}>
+        <Title order={2} ta="center" mb="lg" fw={600} style={{ color: '#4a4a4a' }}>
+          Appointment Payment
+        </Title>
+        <Paper p="md" shadow="sm" radius="md" style={{ backgroundColor: '#f9fafb' }}>
+          <Group justify="space-between" mb="sm">
+            <Text size="lg" fw={500} style={{ color: '#333' }}>Service:</Text>
+            <Text size="lg" style={{ color: '#555' }}>{appointmentState.service}</Text>
+          </Group>
+          <Group justify="space-between" mb="sm">
+            <Text size="lg" fw={500} style={{ color: '#333' }}>Date:</Text>
+            <Text size="lg" style={{ color: '#555' }}>{appointmentState.date}</Text>
+          </Group>
+          <Group justify="space-between" mb="sm">
+            <Text size="lg" fw={500} style={{ color: '#333' }}>Time:</Text>
+            <Text size="lg" style={{ color: '#555' }}>{appointmentState.time}</Text>
+          </Group>
+          <Group justify="space-between" mb="sm">
+            <Text size="lg" fw={500} style={{ color: '#333' }}>Message:</Text>
+            <Text size="lg" style={{ color: '#555' }}>{appointmentDetails?.message}</Text>
+          </Group>
+        </Paper>
+        <Button
+          fullWidth
+          mt="xl"
+          size="lg"
+          onClick={makePayment}
+          disabled={isLoading}
+          style={{ backgroundColor: '#4c6ef5', color: '#fff', fontWeight: 600 }}
+        >
+          {isLoading ? <Loader size="sm" color="#fff" /> : `Pay ₹${appointmentState.fees}`}
+        </Button>
+        {paymentStatus && (
+          <Text c="green" ta="center" mt="md" style={{ fontWeight: 500 }}>
+            {paymentStatus}
+          </Text>
+        )}
+      </Card>
+    </Container>
   );
 };
 

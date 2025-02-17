@@ -18,10 +18,12 @@ import { useDispatch } from "react-redux";
 import { fetchProfessional } from "../../store/slices/professionalSlice"; // Adjust path
 import { setClientPhone, setClientDescription } from "../../store/slices/clientSlice"; // Import actions
 import { useParams } from 'react-router-dom';
+import { AppDispatch } from "../../store/store";
+
 
 export function Contact(props: PaperProps) {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const { id } = useParams();
   
     useEffect(() => {

@@ -17,17 +17,19 @@ import { fetchProfessional } from '../../store/slices/professionalSlice'; // Adj
 import { setClientName, setClientEmail } from '../../store/slices/clientSlice';
 import { setClientId } from '../../store/slices/appointmentSlice';
 import { useParams } from 'react-router-dom';
+import type { AppDispatch } from '../../store/store';
 
 export function AuthenticationForm(props: PaperProps) {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>(); // Ensure dispatch is properly typed
   const { id } = useParams();
-
+  
   useEffect(() => {
     if (id) {
-      dispatch(fetchProfessional(id));
+      dispatch(fetchProfessional(id)); // Now correctly typed
     }
   }, [dispatch, id]);
+  
 
   const checkIfClientExists = async (email: string) => {
     try {

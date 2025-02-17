@@ -8,7 +8,7 @@ interface DemoProps {
   onDateSelect: (date: Date | null) => void; // Add this prop
 }
 
-export function Demo({ availability, onDateSelect }: DemoProps) {
+export function Demo({ onDateSelect }: DemoProps) {
   const [selected, setSelected] = useState<Date | null>(null);
 
   const handleSelect = (date: Date) => {

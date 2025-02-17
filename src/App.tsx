@@ -2,7 +2,6 @@ import "@mantine/core/styles.css";
 import { MantineProvider } from "@mantine/core";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { theme } from "./theme";
-import { useParams } from "react-router-dom";
 import { AuthenticationForm } from "./component/AuthenticationForm/AuthenticationForm";
 import { Services } from "./component/Servicesoff/Services";
 import { Calendar } from "./component/Calendar/Calendar";
@@ -14,7 +13,6 @@ import ProfessionalDetails from "./component/ProfessionalDetails";
 import PaymentComponent from "./component/Payment/Payment";
 
 export default function App() {
-  const { id } = useParams();
   return (
     <MantineProvider theme={theme}>
       <Router>

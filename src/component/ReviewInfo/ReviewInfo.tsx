@@ -1,5 +1,5 @@
 import { UserButton } from '../UserButton/UserButton';
-import { Divider, Group, Paper, PaperProps, Text, Container, Center } from '@mantine/core';
+import { Divider, Paper, PaperProps, Text, Container, Center } from '@mantine/core';
 // import { ButtonProgress } from './ButtonProgress';
 import { SwitchesCard } from './SwitchesCard';
 

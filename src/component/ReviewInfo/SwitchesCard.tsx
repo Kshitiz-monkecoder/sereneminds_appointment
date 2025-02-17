@@ -42,12 +42,12 @@ export function SwitchesCard() {
   const handleSubmit = async () => {
     if (appointmentState.clientId) {
       // Parse the date and time into a Date object
-      const [year, month, day] = appointmentState.date.split("-");
-      const [startTime, endTime] = appointmentState.time.split(" - ");
-      const [hour, minute] = startTime.split(":");
-
-      // Create a new Date object with adjusted time
+      const [year, month, day] = appointmentState.date.split("-").map(num => parseInt(num, 10));
+      const [startTime, _endTime] = appointmentState.time.split(" - ");
+      const [hour, minute] = startTime.split(":").map(num => parseInt(num, 10));
+      
       const appointmentDate = new Date(year, month - 1, day, hour, minute);
+      
 
       // Format the new date in ISO 8601 format (YYYY-MM-DDTHH:MM:SSZ)
       const appointmentTime = appointmentDate.toISOString();

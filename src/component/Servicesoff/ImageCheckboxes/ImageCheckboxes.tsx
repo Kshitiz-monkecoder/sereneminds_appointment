@@ -5,7 +5,7 @@ interface ServiceData {
   name: string;
   description: string;
   duration: string;
-  price: string;
+  price: number;
   image?: string;
 }
 

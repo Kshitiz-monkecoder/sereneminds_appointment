@@ -8,8 +8,9 @@ import { setTime } from "../../../store/slices/appointmentSlice"; // Adjust path
 
 
 interface TimeSlotSelectionProps {
-  availability: { [key: string]: string };
+  availability: any;
   selectedDate: Date | null;
+  onTimeSelect?: (time: string) => void; // ✅ Add this if missing
 }
 
 export function TimeSlotSelection({ availability, selectedDate }: TimeSlotSelectionProps) {

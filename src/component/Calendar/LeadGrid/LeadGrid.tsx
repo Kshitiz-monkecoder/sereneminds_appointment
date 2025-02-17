@@ -10,9 +10,11 @@ import { setDate, setTime } from "../../../store/slices/appointmentSlice"; // Im
 
 const PRIMARY_COL_HEIGHT = "300px";
 
+
+
 export function LeadGrid() {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
-  const [selectedTime, setSelectedTime] = useState<string | null>(null);
+  const [_selectedTime, setSelectedTime] = useState<string | null>(null);
   const { id } = useParams(); // Get professional ID from URL params
   const dispatch = useDispatch<AppDispatch>();
 
@@ -31,11 +33,14 @@ export function LeadGrid() {
   const availability = professional?.availability || {};
 
   // Function to handle date selection and store it in Redux
-  const handleDateSelection = (date: Date) => {
+  const handleDateSelection = (date: Date | null) => {
     setSelectedDate(date);
-    const formattedDate = date.toISOString().split("T")[0]; // Convert to YYYY-MM-DD
-    dispatch(setDate(formattedDate));
+    if (date) {
+      const formattedDate = date.toISOString().split("T")[0]; // Convert to YYYY-MM-DD
+      dispatch(setDate(formattedDate));
+    }
   };
+  
 
   // Function to handle time selection and store it in Redux
   const handleTimeSelection = (time: string) => {

@@ -53,7 +53,7 @@ export function Services(props: PaperProps) {
       if (selectedServiceDetails) {
         dispatch(setService(selectedServiceDetails.serviceTitle));
         dispatch(setFees(selectedServiceDetails.price));
-        dispatch(setDuration(parseInt(selectedServiceDetails.duration))); // Ensure duration is a number
+        dispatch(setDuration(Number(selectedServiceDetails.duration)));  // Ensure duration is a number
       }
       
       navigate(`/calender/${id}`);
