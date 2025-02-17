@@ -11,6 +11,7 @@ import { ServerError } from "./component/ServerError/ServerError";
 import { AppointmentSuccess } from "./component/appointmentsuccess/AppointmentSuccess";
 import ProfessionalDetails from "./component/ProfessionalDetails";
 import PaymentComponent from "./component/Payment/Payment";
+import Hello from "./Hello";
 
 export default function App() {
   return (
@@ -18,6 +19,7 @@ export default function App() {
       <Router>
         <Routes>
           {/* Define routes for each page */}
+          <Route path="/" element={<Hello />} />
           <Route path="/:id" element={<AuthenticationForm  />} />
           <Route path="/services/:id" element={<Services />} />
           <Route path="/calender/:id" element={<Calendar />} />
